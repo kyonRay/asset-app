@@ -36,7 +36,7 @@ public class AssetClient {
     client = bcosSDK.getClient("group");
     cryptoKeyPair = client.getCryptoSuite().createKeyPair();
     client.getCryptoSuite().setCryptoKeyPair(cryptoKeyPair);
-    logger.debug("create client for group1, account address is " + cryptoKeyPair.getAddress());
+    logger.debug("create client for group, account address is " + cryptoKeyPair.getAddress());
   }
 
   public void deployAssetAndRecordAddr() {
@@ -152,13 +152,13 @@ public class AssetClient {
   public static void Usage() {
     System.out.println(" Usage:");
     System.out.println(
-        "\t java -cp conf/:lib/*:apps/* org.fisco.bcos.asset.client.AssetClient deploy");
+        "\t java -cp 'conf/:lib/*:apps/*' org.fisco.bcos.asset.client.AssetClient deploy");
     System.out.println(
-        "\t java -cp conf/:lib/*:apps/* org.fisco.bcos.asset.client.AssetClient query account");
+        "\t java -cp 'conf/:lib/*:apps/*' org.fisco.bcos.asset.client.AssetClient query account");
     System.out.println(
-        "\t java -cp conf/:lib/*:apps/* org.fisco.bcos.asset.client.AssetClient register account value");
+        "\t java -cp 'conf/:lib/*:apps/*' org.fisco.bcos.asset.client.AssetClient register account value");
     System.out.println(
-        "\t java -cp conf/:lib/*:apps/* org.fisco.bcos.asset.client.AssetClient transfer from_account to_account amount");
+        "\t java -cp 'conf/:lib/*:apps/*' org.fisco.bcos.asset.client.AssetClient transfer from_account to_account amount");
     System.exit(0);
   }
 

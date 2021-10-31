@@ -34,7 +34,7 @@ List spring = [
 dependencies {
     compile logger
     runtime logger
-    compile ("org.fisco-bcos.java-sdk:fisco-bcos-java-sdk:3.0.0-2021102602-SNAPSHOT")
+    compile ("org.fisco-bcos.java-sdk:fisco-bcos-java-sdk:3.0.0-2021102701-SNAPSHOT")
 	compile spring
 }
 
