@@ -5,10 +5,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 import org.fisco.bcos.asset.contract.Asset;
 import org.fisco.bcos.sdk.BcosSDK;
 import org.fisco.bcos.sdk.client.Client;
+import org.fisco.bcos.sdk.codec.datatypes.generated.tuples.generated.Tuple1;
 import org.fisco.bcos.sdk.codec.datatypes.generated.tuples.generated.Tuple2;
 import org.fisco.bcos.sdk.crypto.keypair.CryptoKeyPair;
 import org.fisco.bcos.sdk.model.TransactionReceipt;
@@ -48,8 +50,6 @@ public class AssetClient {
 
       recordAssetAddr(asset.getContractAddress());
     } catch (Exception e) {
-      // TODO Auto-generated catch block
-      // e.printStackTrace();
       System.out.println(" deploy Asset contract failed, error message is  " + e.getMessage());
     }
   }
@@ -87,8 +87,6 @@ public class AssetClient {
         System.out.printf(" %s asset account is not exist \n", assetAccount);
       }
     } catch (Exception e) {
-      // TODO Auto-generated catch block
-      // e.printStackTrace();
       logger.error(" queryAssetAmount exception, error message is {}", e.getMessage());
 
       System.out.printf(" query asset account failed, error message is %s\n", e.getMessage());
@@ -101,22 +99,19 @@ public class AssetClient {
 
       Asset asset = Asset.load(contractAddress, client, cryptoKeyPair);
       TransactionReceipt receipt = asset.register(assetAccount, amount);
-      List<Asset.RegisterEventEventResponse> response = asset.getRegisterEventEvents(receipt);
-      if (!response.isEmpty()) {
-        if (response.get(0).ret.compareTo(new BigInteger("0")) == 0) {
+      Tuple1<BigInteger> registerOutput = asset.getRegisterOutput(receipt);
+      if (receipt.getStatus() == 0) {
+        if (Objects.equals(registerOutput.getValue1(), BigInteger.valueOf(0))) {
           System.out.printf(
-              " register asset account success => asset: %s, value: %s \n", assetAccount, amount);
+                  " register asset account success => asset: %s, value: %s \n", assetAccount, amount);
         } else {
           System.out.printf(
-              " register asset account failed, ret code is %s \n", response.get(0).ret.toString());
+                  " register asset account failed, ret code is %s \n", registerOutput.getValue1());
         }
       } else {
-        System.out.println(" event log not found, maybe transaction not exec. ");
+        System.out.println(" receipt status is error, maybe transaction not exec, status is: " + receipt.getStatus());
       }
     } catch (Exception e) {
-      // TODO Auto-generated catch block
-      // e.printStackTrace();
-
       logger.error(" registerAssetAccount exception, error message is {}", e.getMessage());
       System.out.printf(" register asset account failed, error message is %s\n", e.getMessage());
     }
@@ -127,22 +122,20 @@ public class AssetClient {
       String contractAddress = loadAssetAddr();
       Asset asset = Asset.load(contractAddress, client, cryptoKeyPair);
       TransactionReceipt receipt = asset.transfer(fromAssetAccount, toAssetAccount, amount);
-      List<Asset.TransferEventEventResponse> response = asset.getTransferEventEvents(receipt);
-      if (!response.isEmpty()) {
-        if (response.get(0).ret.compareTo(new BigInteger("0")) == 0) {
+      Tuple1<BigInteger> transferOutput = asset.getTransferOutput(receipt);
+      if (receipt.getStatus() == 0) {
+        if (Objects.equals(transferOutput.getValue1(), BigInteger.valueOf(0))) {
           System.out.printf(
               " transfer success => from_asset: %s, to_asset: %s, amount: %s \n",
               fromAssetAccount, toAssetAccount, amount);
         } else {
           System.out.printf(
-              " transfer asset account failed, ret code is %s \n", response.get(0).ret.toString());
+              " transfer asset account failed, ret code is %s \n", transferOutput.getValue1());
         }
       } else {
-        System.out.println(" event log not found, maybe transaction not exec. ");
+        System.out.println(" receipt status is error, maybe transaction not exec. status is: " + receipt.getStatus());
       }
     } catch (Exception e) {
-      // TODO Auto-generated catch block
-      // e.printStackTrace();
 
       logger.error(" registerAssetAccount exception, error message is {}", e.getMessage());
       System.out.printf(" register asset account failed, error message is %s\n", e.getMessage());
