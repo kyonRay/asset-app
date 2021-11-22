@@ -8,6 +8,7 @@
 		<property name="cryptoMaterial">
 			<map>
 			<entry key="certPath" value="conf" />
+				<entry key="useSMCrypto" value="false"/>
 			<!-- SSL certificate configuration -->
 			<!-- entry key="caCert" value="conf/ca.crt" /-->
 			<!-- entry key="sslCert" value="conf/sdk.crt" /-->
@@ -28,6 +29,7 @@
 						<value>127.0.0.1:20201</value>
 					</list>
 				</entry>
+				<entry key="defaultGroup" value="group" />
 			</map>
 		</property>
 		<!--
