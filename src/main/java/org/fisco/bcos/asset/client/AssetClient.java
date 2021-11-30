@@ -80,8 +80,8 @@ public class AssetClient {
     try {
       String contractAddress = loadAssetAddr();
       Asset asset = Asset.load(contractAddress, client, cryptoKeyPair);
-      Tuple2<BigInteger, BigInteger> result = asset.select(assetAccount);
-      if (result.getValue1().compareTo(new BigInteger("0")) == 0) {
+      Tuple2<Boolean, BigInteger> result = asset.select(assetAccount);
+      if (result.getValue1()) {
         System.out.printf(" asset account %s, value %s \n", assetAccount, result.getValue2());
       } else {
         System.out.printf(" %s asset account is not exist \n", assetAccount);
